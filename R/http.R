@@ -46,7 +46,7 @@ function(
            verb = "GET",
            action = "/",
            query_args = query,
-           canonical_headers = list(host = paste0(api, ".amazonaws.com"),
+           canonical_headers = list(host = paste0(api,".", region, ".amazonaws.com"),
                                     `x-amz-date` = d_timestamp),
            request_body = "",
            key = key, 
@@ -63,7 +63,7 @@ function(
     H <- do.call(add_headers, headers)
 
     # execute request
-    r <- GET(paste0("https://", region, api, ".amazonaws.com"), H, query = query, ...)
+    r <- GET(paste0("https://", api,".", region, ".amazonaws.com"), H, query = query, ...)
     if (http_status(r)$category == "Client error") {
         x <- try(xml2::as_list(xml2::read_xml(content(r, "text", encoding = "UTF-8"))), silent = TRUE)
         if (inherits(x, "try-error")) {

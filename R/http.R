@@ -13,7 +13,7 @@
 #' @import httr
 #' @importFrom jsonlite fromJSON
 #' @importFrom xml2 read_xml as_list
-#' @importFrom aws.signature signature_v4_auth
+#' @importFrom aws.signature signature_v4_auth locate_credentials
 #' @export
 cloudwatchHTTP <- 
 function(
@@ -63,7 +63,7 @@ function(
     H <- do.call(add_headers, headers)
 
     # execute request
-    r <- GET(paste0("https://", api, ".amazonaws.com"), H, query = query, ...)
+    r <- GET(paste0("https://", region, api, ".amazonaws.com"), H, query = query, ...)
     if (http_status(r)$category == "Client error") {
         x <- try(xml2::as_list(xml2::read_xml(content(r, "text", encoding = "UTF-8"))), silent = TRUE)
         if (inherits(x, "try-error")) {
